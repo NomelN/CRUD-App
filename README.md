@@ -17,7 +17,6 @@ git clone https://github.com/NomelN/CRUD-App.git
 
 2. Navigate to the project folder:
 
-cd Full-Stack_projet
 
 3. Open the project in Visual Studio Code (or your preferred code editor).
 
