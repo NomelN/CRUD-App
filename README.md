@@ -1,5 +1,4 @@
 # CRUD-App
-# CRUD PROJECT WITH REACT AND DJANGO
 
 ## Project Context
 
@@ -13,7 +12,7 @@ The main objective of this mini project is to enable the registration, modificat
 
 1. Clone the repository using the following command:
 
-git clone https://github.com/NomelN/Full-Stack_projet.git
+git clone https://github.com/NomelN/CRUD-App.git
 
 
 2. Navigate to the project folder:
