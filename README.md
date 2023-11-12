@@ -11,9 +11,9 @@ The main objective of this mini project is to enable the registration, modificat
 
 
 1. Clone the repository using the following command:
-
+```
 git clone https://github.com/NomelN/CRUD-App.git
-
+```
 
 2. Navigate to the project folder:
 
@@ -21,36 +21,36 @@ git clone https://github.com/NomelN/CRUD-App.git
 3. Open the project in Visual Studio Code (or your preferred code editor).
 
 4. Create a virtual environment:
-
+```
 pip install virtualenv
-
-
+```
+```
 python -m venv venv
-
-
+```
+```
 venv\Scripts\activate
-
+```
 To launch the Frontend server:
-
+```
 cd frontend
-
+```
 5. Install the project's React dependencies:
-
+```
 npm install
-
+```
 6. Start the server:
-
+```
 npm run dev
-
+```
 To launch the Backend server:
-
+```
 cd backend
-
+```
 7. Install the project's Python dependencies:
-
+```
 pip install -r requirements.txt
-
+```
 8. Start the server:
-
+```
 python manage.py runserver
-
+```
