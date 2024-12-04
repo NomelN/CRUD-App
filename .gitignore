@@ -1,0 +1,5 @@
+venv/
+env/
+node_modules/
+__pycache__/
+backend/api/migrations/0001_initial.py
