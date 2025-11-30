@@ -16,26 +16,37 @@ export function ProductFormPage(){
     
 
     const onSubmit = handleSubmit(async data => {
-        if (params.id) {
-           await updateProduct(params.id, data)
-           toast.success('Product updated', {
-            position: "bottom-right",
-            style: {
-                background: "#013d57",
-                color: "#fff"
-            }
-        })
-        }else {
-            await createProduct(data);
-            toast.success('Product created', {
+        try {
+            if (params.id) {
+               await updateProduct(params.id, data)
+               toast.success('Product updated', {
                 position: "bottom-right",
                 style: {
                     background: "#013d57",
                     color: "#fff"
                 }
             })
+            }else {
+                await createProduct(data);
+                toast.success('Product created', {
+                    position: "bottom-right",
+                    style: {
+                        background: "#013d57",
+                        color: "#fff"
+                    }
+                })
+            }
+            navigate("/products");
+        } catch (error) {
+            console.error('Error saving product:', error);
+            toast.error(error.response?.data?.message || 'Failed to save product. Please check the console for details.', {
+                position: "bottom-right",
+                style: {
+                    background: "#dc2626",
+                    color: "#fff"
+                }
+            })
         }
-        navigate("/products");
     });
     useEffect(() => {
         async function loadProduct() {
