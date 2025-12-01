@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { createProduct, deleteProduct, updateProduct, getProduct } from '../api/products.api';
+import { getAllCategories } from '../api/categories.api';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { IonAlert } from '@ionic/react';
@@ -16,6 +17,20 @@ export function ProductFormPage() {
     const navigate = useNavigate()
     const params = useParams()
     const [showAlert, setShowAlert] = useState(false);
+    const [categories, setCategories] = useState([]);
+
+    useEffect(() => {
+        async function loadCategories() {
+            try {
+                const res = await getAllCategories();
+                setCategories(res.data);
+            } catch (error) {
+                console.error("Failed to load categories", error);
+                toast.error("Failed to load categories");
+            }
+        }
+        loadCategories();
+    }, []);
 
     const onSubmit = handleSubmit(async data => {
         try {
@@ -54,10 +69,13 @@ export function ProductFormPage() {
     useEffect(() => {
         async function loadProduct() {
             if (params.id) {
-                const { data: { name, price, quantity } } = await getProduct(params.id);
-                setValue('name', name)
-                setValue('price', price)
-                setValue('quantity', quantity)
+                try {
+                    const { data } = await getProduct(params.id);
+                    setValue('name', data.name)
+                    setValue('price', data.price)
+                    setValue('quantity', data.quantity)
+                    setValue('category', data.category)
+                } catch (error) { }
             }
         }
         loadProduct()
@@ -126,6 +144,21 @@ export function ProductFormPage() {
                             />
                             {errors.quantity && <span className="text-red-400 text-sm mt-1 block">{errors.quantity.message}</span>}
                         </div>
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-500 dark:text-zinc-400 mb-1">Category</label>
+                        <select
+                            {...register("category")}
+                            className="bg-gray-50 dark:bg-zinc-900/50 p-3 rounded-lg block w-full border border-gray-300 dark:border-zinc-700 focus:border-indigo-500 focus:ring-indigo-500 focus:ring-1 outline-none transition-colors text-gray-900 dark:text-white appearance-none"
+                        >
+                            <option value="">Select a category</option>
+                            {categories.map(category => (
+                                <option key={category.id} value={category.id}>
+                                    {category.icon} {category.name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <button className='bg-indigo-600 hover:bg-indigo-700 text-white font-medium p-3 rounded-lg block w-full mt-6 transition-colors shadow-lg shadow-indigo-500/20'>

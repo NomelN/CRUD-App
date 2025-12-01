@@ -1,44 +1,56 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import { getAllProducts } from "../api/products.api";
+import { getAllCategories } from "../api/categories.api";
 import { ProductCard } from "./ProductCard";
 import { SkeletonCard } from "./SkeletonCard";
+import { toast } from "react-hot-toast";
 
 export function ProductsList({ searchTerm }) {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [sortBy, setSortBy] = useState('name'); // name, price, quantity
-  const [filterStock, setFilterStock] = useState('all'); // all, in_stock, low_stock, out_of_stock
+  const [sortOrder, setSortOrder] = useState('name-asc');
+  const [stockFilter, setStockFilter] = useState('all');
+  const [categoryFilter, setCategoryFilter] = useState('all');
 
   useEffect(() => {
-    async function loadProducts() {
+    async function loadData() {
       setIsLoading(true);
       try {
-        const res = await getAllProducts();
-        setProducts(res.data);
+        const [productsRes, categoriesRes] = await Promise.all([
+          getAllProducts(),
+          getAllCategories()
+        ]);
+        setProducts(productsRes.data);
+        setCategories(categoriesRes.data);
       } catch (error) {
         console.error("Failed to load products", error);
       } finally {
         setIsLoading(false);
       }
     }
-    loadProducts();
+    loadData();
   }, []);
 
   const filteredProducts = products
     .filter((product) => product.name.toLowerCase().includes(searchTerm.toLowerCase()))
     .filter((product) => {
-      if (filterStock === 'all') return true;
-      if (filterStock === 'in_stock') return product.quantity >= 5;
-      if (filterStock === 'low_stock') return product.quantity > 0 && product.quantity < 5;
-      if (filterStock === 'out_of_stock') return product.quantity === 0;
+      // Filter by stock status
+      if (stockFilter === 'in-stock' && product.quantity === 0) return false;
+      if (stockFilter === 'low-stock' && (product.quantity > 5 || product.quantity === 0)) return false;
+      if (stockFilter === 'out-of-stock' && product.quantity > 0) return false;
+
+      // Filter by category
+      if (categoryFilter !== 'all' && product.category !== parseInt(categoryFilter)) return false;
+
       return true;
     })
     .sort((a, b) => {
-      if (sortBy === 'name') return a.name.localeCompare(b.name);
-      if (sortBy === 'price_asc') return a.price - b.price;
-      if (sortBy === 'price_desc') return b.price - a.price;
-      if (sortBy === 'quantity_asc') return a.quantity - b.quantity;
-      if (sortBy === 'quantity_desc') return b.quantity - a.quantity;
+      if (sortOrder === 'name') return a.name.localeCompare(b.name);
+      if (sortOrder === 'price_asc') return a.price - b.price;
+      if (sortOrder === 'price_desc') return b.price - a.price;
+      if (sortOrder === 'quantity_asc') return a.quantity - b.quantity;
+      if (sortOrder === 'quantity_desc') return b.quantity - a.quantity;
       return 0;
     });
 
@@ -46,8 +58,8 @@ export function ProductsList({ searchTerm }) {
     <div>
       <div className="flex flex-wrap gap-4 mb-6 justify-center md:justify-end">
         <select
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value)}
           className="bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5 transition-colors"
         >
           <option value="name">Sort by Name</option>
@@ -58,14 +70,27 @@ export function ProductsList({ searchTerm }) {
         </select>
 
         <select
-          value={filterStock}
-          onChange={(e) => setFilterStock(e.target.value)}
+          value={stockFilter}
+          onChange={(e) => setStockFilter(e.target.value)}
           className="bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5 transition-colors"
         >
           <option value="all">All Stock Status</option>
-          <option value="in_stock">In Stock</option>
-          <option value="low_stock">Low Stock</option>
-          <option value="out_of_stock">Out of Stock</option>
+          <option value="in-stock">In Stock</option>
+          <option value="low-stock">Low Stock</option>
+          <option value="out-of-stock">Out of Stock</option>
+        </select>
+
+        <select
+          value={categoryFilter}
+          onChange={(e) => setCategoryFilter(e.target.value)}
+          className="bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 text-gray-900 dark:text-white text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5"
+        >
+          <option value="all">All Categories</option>
+          {categories.map(category => (
+            <option key={category.id} value={category.id}>
+              {category.icon} {category.name}
+            </option>
+          ))}
         </select>
       </div>
 

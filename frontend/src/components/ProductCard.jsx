@@ -25,9 +25,19 @@ export function ProductCard({ product }) {
                 </svg>
             </div>
 
-            <div className="mb-4">
-                <h1 className="font-bold text-xl text-gray-900 dark:text-white mb-1 tracking-wide">{product.name}</h1>
-                <span className={`text-xs font-medium px-2.5 py-0.5 rounded border ${status.color}`}>
+            <div className="flex justify-between items-start mb-4">
+                <div>
+                    <h2 className="font-bold text-xl text-gray-900 dark:text-white mb-1">{product.name}</h2>
+                    {product.category_details && (
+                        <span className="inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300">
+                            {product.category_details.icon} {product.category_details.name}
+                        </span>
+                    )}
+                </div>
+                <span className={`px-3 py-1 rounded-full text-xs font-medium ${product.quantity === 0 ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' :
+                        product.quantity < 5 ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' :
+                            'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+                    }`}>
                     {status.label}
                 </span>
             </div>

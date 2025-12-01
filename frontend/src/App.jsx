@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ProductsPage } from "./pages/ProductsPage";
 import { ProductFormPage } from "./pages/ProductFormPage";
+import { CategoriesPage } from "./pages/CategoriesPage";
+import { CategoryFormPage } from "./pages/CategoryFormPage";
 import { Navigation } from "./components/Navigation";
 import { Toaster } from "react-hot-toast"
 import { ThemeProvider } from "./context/ThemeContext";
@@ -27,6 +29,9 @@ function App() {
               <Route path="/products" element={<ProductsPage />} />
               <Route path="/products-create" element={<ProductFormPage />} />
               <Route path="/products/:id" element={<ProductFormPage />} />
+              <Route path="/categories" element={<CategoriesPage />} />
+              <Route path="/categories-create" element={<CategoryFormPage />} />
+              <Route path="/categories/:id" element={<CategoryFormPage />} />
             </Routes>
             <Toaster />
           </div>

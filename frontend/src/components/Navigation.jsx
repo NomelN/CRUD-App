@@ -18,6 +18,10 @@ export function Navigation() {
             </Link>
 
             <div className="flex items-center gap-4">
+                <Link to="/categories" className="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-white font-medium transition-colors">
+                    Categories
+                </Link>
+
                 <button
                     onClick={toggleTheme}
                     className="p-2 rounded-full bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors text-gray-600 dark:text-gray-300"

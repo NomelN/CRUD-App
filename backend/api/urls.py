@@ -5,7 +5,8 @@ from api import views
 
 
 router = routers.DefaultRouter()
-router.register(r'products',views.ProductView, 'api')
+router.register(r'products', views.ProductView, 'products')
+router.register(r'categories', views.CategoryView, 'categories')
 
 
 urlpatterns = [
