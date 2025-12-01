@@ -3,3 +3,4 @@ env/
 node_modules/
 __pycache__/
 backend/api/migrations/0001_initial.py
+backend/api/migrations/0003_product_sold_quantity.py
