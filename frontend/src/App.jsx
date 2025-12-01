@@ -21,18 +21,26 @@ import { setupIonicReact } from '@ionic/react';
 
 setupIonicReact();
 
+import { DashboardPage } from './pages/DashboardPage';
+
 function App() {
   return (
-    <BrowserRouter>
-      <AuthProvider>
-        <ThemeProvider>
-          <div className="min-h-screen bg-gray-50 dark:bg-dark-bg text-gray-900 dark:text-dark-text transition-colors duration-300">
+    <AuthProvider>
+      <ThemeProvider>
+        <BrowserRouter>
+          <div className="min-h-screen bg-gray-50 dark:bg-dark-bg transition-colors duration-300">
             <div className="container mx-auto px-4">
               <Navigation />
               <Routes>
-                <Route path="/" element={<Navigate to="/products" />} />
+                <Route path="/" element={<Navigate to="/products" replace />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
+
+                <Route path="/dashboard" element={
+                  <ProtectedRoute>
+                    <DashboardPage />
+                  </ProtectedRoute>
+                } />
 
                 {/* Protected Routes */}
                 <Route path="/products" element={<ProtectedRoute><ProductsPage /></ProtectedRoute>} />
@@ -45,9 +53,9 @@ function App() {
               <Toaster />
             </div>
           </div>
-        </ThemeProvider>
-      </AuthProvider>
-    </BrowserRouter>
+        </BrowserRouter>
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
 

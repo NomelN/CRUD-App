@@ -23,10 +23,16 @@ export function Navigation() {
                 </span>
             </Link>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-6">
                 {isAuthenticated && (
                     <>
-                        <Link to="/categories" className="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-white font-medium transition-colors">
+                        <Link to="/dashboard" className="text-gray-500 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-white font-medium transition-colors">
+                            Dashboard
+                        </Link>
+                        <Link to="/products" className="text-gray-500 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-white font-medium transition-colors">
+                            Products
+                        </Link>
+                        <Link to="/categories" className="text-gray-500 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-white font-medium transition-colors">
                             Categories
                         </Link>
 
