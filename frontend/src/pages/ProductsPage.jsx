@@ -20,7 +20,7 @@ export function ProductsPage() {
             placeholder="Search products..."
             value={searchTerm}
             onChange={handleSearch}
-            className="block w-full p-4 pl-10 text-sm text-white border border-zinc-700 rounded-xl bg-zinc-800/50 focus:ring-indigo-500 focus:border-indigo-500 placeholder-zinc-400 backdrop-blur-sm transition-all shadow-lg"
+            className="block w-full p-4 pl-10 text-sm text-gray-900 dark:text-white border border-gray-300 dark:border-zinc-700 rounded-xl bg-white dark:bg-zinc-800/50 focus:ring-indigo-500 focus:border-indigo-500 placeholder-gray-400 dark:placeholder-zinc-400 backdrop-blur-sm transition-all shadow-lg"
           />
         </div>
       </div>
