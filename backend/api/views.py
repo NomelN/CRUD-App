@@ -6,7 +6,8 @@ from django.contrib.auth.models import User, Group, update_last_login
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.db.models import Sum, Count, F
-from .serializer import ProductSerializer, CategorySerializer
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes
+from .serializer import ProductSerializer, CategorySerializer, UserSerializer, RegisterSerializer, UpdateProfileSerializer
 from .models import Product, Category
 from .permissions import IsManager, IsAdmin, IsReader
 
@@ -22,6 +23,11 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 class RegisterView(APIView):
     permission_classes = [permissions.AllowAny]
 
+    @extend_schema(
+        request=RegisterSerializer,
+        responses=UserSerializer,
+        description="Register a new user"
+    )
     def post(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
@@ -55,6 +61,10 @@ class RegisterView(APIView):
 class CurrentUserView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
+    @extend_schema(
+        responses=UserSerializer,
+        description="Get current authenticated user details"
+    )
     def get(self, request):
         user = request.user
         return Response({
@@ -69,6 +79,11 @@ class CurrentUserView(APIView):
 class UpdateProfileView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
+    @extend_schema(
+        request=UpdateProfileSerializer,
+        responses=UserSerializer,
+        description="Update user profile"
+    )
     def put(self, request):
         user = request.user
         username = request.data.get('username')
@@ -125,6 +140,10 @@ class ProductViewSet(viewsets.ModelViewSet):
 class StatsView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
+    @extend_schema(
+        responses=OpenApiTypes.OBJECT,
+        description="Get dashboard statistics"
+    )
     def get(self, request):
         # Key Metrics
         total_products = Product.objects.count()
