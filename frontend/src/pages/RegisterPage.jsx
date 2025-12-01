@@ -44,7 +44,13 @@ export function RegisterPage() {
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
                         <input
                             type="email"
-                            {...register("email", { required: "Email is required" })}
+                            {...register("email", {
+                                required: "Email is required",
+                                pattern: {
+                                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                    message: "Invalid email address"
+                                }
+                            })}
                             className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-zinc-900/50 border border-gray-300 dark:border-zinc-700 focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-gray-900 dark:text-white"
                             placeholder="your@email.com"
                         />
