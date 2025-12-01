@@ -23,6 +23,7 @@ setupIonicReact();
 
 import { DashboardPage } from './pages/DashboardPage';
 import { ProfilePage } from './pages/ProfilePage';
+import { LandingPage } from './pages/LandingPage';
 
 function App() {
   return (
@@ -33,7 +34,7 @@ function App() {
             <div className="container mx-auto px-4">
               <Navigation />
               <Routes>
-                <Route path="/" element={<Navigate to="/products" replace />} />
+                <Route path="/" element={<LandingPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
 

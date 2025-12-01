@@ -36,6 +36,7 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
 # Application definition
 
 INSTALLED_APPS = [
+    'unfold',  # Unfold must be before django.contrib.admin
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'coreapi',
     'api',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -135,14 +137,27 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #cors authorization
 CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]
 
+# Authentication backends
+AUTHENTICATION_BACKENDS = [
+    'api.authentication.EmailBackend',  # Custom email authentication
+    'django.contrib.auth.backends.ModelBackend',  # Fallback to default
+]
+
 REST_FRAMEWORK = {
-    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ]
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Stock Management API',
+    'DESCRIPTION': 'API for managing products and stocks',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
 }
 
 from datetime import timedelta

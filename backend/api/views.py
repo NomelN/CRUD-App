@@ -6,7 +6,8 @@ from django.contrib.auth.models import User, Group, update_last_login
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.db.models import Sum, Count, F
-from .serializer import ProductSerializer, CategorySerializer
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes
+from .serializer import ProductSerializer, CategorySerializer, UserSerializer, RegisterSerializer, UpdateProfileSerializer
 from .models import Product, Category
 from .permissions import IsManager, IsAdmin, IsReader
 
@@ -15,20 +16,30 @@ class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
         if response.status_code == 200:
-            user = User.objects.get(username=request.data['username'])
+            # request.data['username'] actually contains the email now
+            user = User.objects.get(email=request.data['username'])
             update_last_login(None, user)
         return response
 
 class RegisterView(APIView):
     permission_classes = [permissions.AllowAny]
 
+    @extend_schema(
+        request=RegisterSerializer,
+        responses=UserSerializer,
+        description="Register a new user"
+    )
     def post(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
         email = request.data.get('email')
         
-        if not username or not password:
-            return Response({'error': 'Username and password required'}, status=status.HTTP_400_BAD_REQUEST)
+        if not username or not password or not email:
+            return Response({'error': 'Username, email and password are required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Check if email already exists
+        if User.objects.filter(email=email).exists():
+            return Response({'error': 'Email already exists'}, status=status.HTTP_400_BAD_REQUEST)
             
         if User.objects.filter(username=username).exists():
             return Response({'error': 'Username already exists'}, status=status.HTTP_400_BAD_REQUEST)
@@ -55,6 +66,10 @@ class RegisterView(APIView):
 class CurrentUserView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
+    @extend_schema(
+        responses=UserSerializer,
+        description="Get current authenticated user details"
+    )
     def get(self, request):
         user = request.user
         return Response({
@@ -69,6 +84,11 @@ class CurrentUserView(APIView):
 class UpdateProfileView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
+    @extend_schema(
+        request=UpdateProfileSerializer,
+        responses=UserSerializer,
+        description="Update user profile"
+    )
     def put(self, request):
         user = request.user
         username = request.data.get('username')
@@ -125,6 +145,10 @@ class ProductViewSet(viewsets.ModelViewSet):
 class StatsView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
+    @extend_schema(
+        responses=OpenApiTypes.OBJECT,
+        description="Get dashboard statistics"
+    )
     def get(self, request):
         # Key Metrics
         total_products = Product.objects.count()
