@@ -2,14 +2,23 @@ from django.shortcuts import render
 from rest_framework import viewsets, permissions, status, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User, Group, update_last_login
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenObtainPairView
 from django.db.models import Sum, Count, F
 from .serializer import ProductSerializer, CategorySerializer
 from .models import Product, Category
 from .permissions import IsManager, IsAdmin, IsReader
 
 # Auth Views
+class CustomTokenObtainPairView(TokenObtainPairView):
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        if response.status_code == 200:
+            user = User.objects.get(username=request.data['username'])
+            update_last_login(None, user)
+        return response
+
 class RegisterView(APIView):
     permission_classes = [permissions.AllowAny]
 
