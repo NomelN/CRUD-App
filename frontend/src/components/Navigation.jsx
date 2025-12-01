@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 export function Navigation() {
     const { theme, toggleTheme } = useTheme();
     const { user, logout, isAuthenticated } = useAuth();
+    const canEdit = user?.roles?.includes('Manager') || user?.roles?.includes('Admin');
 
     return (
         <div className="flex justify-between items-center py-6 mb-8 sticky top-0 z-50 bg-white/80 dark:bg-dark-bg/80 backdrop-blur-lg border-b border-gray-200 dark:border-white/10 transition-colors duration-300">
@@ -75,8 +76,11 @@ export function Navigation() {
                 )}
 
                 {isAuthenticated && (
-                    <Link to="/products-create">
-                        <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium shadow-lg shadow-indigo-500/30 transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
+                    <Link to={canEdit ? "/products-create" : "#"} className={!canEdit ? "pointer-events-none" : ""}>
+                        <button
+                            disabled={!canEdit}
+                            className={`bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium shadow-lg shadow-indigo-500/30 flex items-center gap-2 transition-all ${canEdit ? 'hover:bg-indigo-700 hover:scale-105 active:scale-95' : 'opacity-50 cursor-not-allowed'}`}
+                        >
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                             </svg>
