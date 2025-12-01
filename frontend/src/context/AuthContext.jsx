@@ -47,11 +47,7 @@ export function AuthProvider({ children }) {
 
     const register = async (userData) => {
         try {
-            const { data } = await apiRegister(userData);
-            localStorage.setItem('access_token', data.access);
-            localStorage.setItem('refresh_token', data.refresh);
-            setUser(data.user);
-            setIsAuthenticated(true);
+            await apiRegister(userData);
             return true;
         } catch (error) {
             console.error("Registration failed", error);

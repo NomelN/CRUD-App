@@ -15,8 +15,8 @@ export function RegisterPage() {
     const onSubmit = handleSubmit(async (data) => {
         try {
             await registerUser(data);
-            toast.success('Account created successfully!');
-            navigate('/products');
+            toast.success('Account created! Please log in.');
+            navigate('/login');
         } catch (error) {
             toast.error('Registration failed. Username might be taken.');
         }
