@@ -11,9 +11,11 @@ admin.site.unregister(User)
 # Custom User admin to show last_login
 @admin.register(User)
 class CustomUserAdmin(BaseUserAdmin):
-    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'last_login', 'date_joined')
+    list_display = ('email', 'username', 'first_name', 'last_name', 'is_staff', 'last_login', 'date_joined')
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
+    search_fields = ('email', 'username', 'first_name', 'last_name')  # Email first in search
     readonly_fields = ('last_login', 'date_joined')
+    ordering = ('email',)  # Sort by email by default
 
 
 @admin.register(Category)
