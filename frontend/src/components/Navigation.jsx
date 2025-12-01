@@ -36,14 +36,14 @@ export function Navigation() {
                             Categories
                         </Link>
 
-                        <div className="flex items-center gap-2 px-3 py-1 bg-gray-100 dark:bg-white/5 rounded-full">
+                        <Link to="/profile" className="flex items-center gap-2 px-3 py-1 bg-gray-100 dark:bg-white/5 rounded-full hover:bg-gray-200 dark:hover:bg-white/10 transition-colors">
                             <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
                                 {user?.username}
                             </span>
                             <span className="text-xs px-1.5 py-0.5 bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 rounded uppercase font-bold">
                                 {user?.roles?.[0] || 'User'}
                             </span>
-                        </div>
+                        </Link>
                     </>
                 )}
 

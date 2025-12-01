@@ -51,6 +51,53 @@ class CurrentUserView(APIView):
         return Response({
             'id': user.id,
             'username': user.username,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'email': user.email,
+            'roles': [g.name for g in user.groups.all()]
+        })
+
+class UpdateProfileView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def put(self, request):
+        user = request.user
+        username = request.data.get('username')
+        first_name = request.data.get('first_name')
+        last_name = request.data.get('last_name')
+        email = request.data.get('email')
+        current_password = request.data.get('current_password')
+        new_password = request.data.get('new_password')
+
+        # Check if username is taken by another user
+        if username and username != user.username:
+            if User.objects.filter(username=username).exists():
+                return Response({'error': 'Username already taken'}, status=status.HTTP_400_BAD_REQUEST)
+            user.username = username
+
+        # Update first_name and last_name
+        if first_name is not None:
+            user.first_name = first_name
+        if last_name is not None:
+            user.last_name = last_name
+
+        # Update email only if it doesn't exist yet
+        if email and not user.email:
+            user.email = email
+
+        # Update password if provided
+        if current_password and new_password:
+            if not user.check_password(current_password):
+                return Response({'error': 'Current password is incorrect'}, status=status.HTTP_400_BAD_REQUEST)
+            user.set_password(new_password)
+
+        user.save()
+
+        return Response({
+            'id': user.id,
+            'username': user.username,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
             'email': user.email,
             'roles': [g.name for g in user.groups.all()]
         })

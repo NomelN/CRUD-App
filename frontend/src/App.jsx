@@ -22,6 +22,7 @@ import { setupIonicReact } from '@ionic/react';
 setupIonicReact();
 
 import { DashboardPage } from './pages/DashboardPage';
+import { ProfilePage } from './pages/ProfilePage';
 
 function App() {
   return (
@@ -39,6 +40,12 @@ function App() {
                 <Route path="/dashboard" element={
                   <ProtectedRoute>
                     <DashboardPage />
+                  </ProtectedRoute>
+                } />
+
+                <Route path="/profile" element={
+                  <ProtectedRoute>
+                    <ProfilePage />
                   </ProtectedRoute>
                 } />
 
