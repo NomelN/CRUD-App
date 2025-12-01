@@ -15,7 +15,7 @@ class UserSerializer(serializers.ModelSerializer):
 class RegisterSerializer(serializers.Serializer):
     username = serializers.CharField(required=True)
     password = serializers.CharField(required=True, write_only=True)
-    email = serializers.EmailField(required=False)
+    email = serializers.EmailField(required=True)
 
 class UpdateProfileSerializer(serializers.Serializer):
     username = serializers.CharField(required=False)
