@@ -2,7 +2,6 @@
 
 A modern, responsive web application for managing stock inventory, built with **React** and **Django**.
 
-![Main UI](file:///Users/mickaelnomel/.gemini/antigravity/brain/a26adaa1-5f66-4b7a-afba-69db78412cea/light_mode_ui_1764580244299.png)
 
 ## ✨ Features
 
@@ -94,14 +93,3 @@ npm run dev
 | **Admin** | ✅ | ✅ | ✅ | ✅ |
 
 > **Note**: New users are registered as **Readers** by default. An Admin must promote them to Manager via the Django Admin Panel (`http://localhost:8000/admin`).
-
-## 📸 Screenshots
-
-### Dark Mode
-![Dark Mode](file:///Users/mickaelnomel/.gemini/antigravity/brain/a26adaa1-5f66-4b7a-afba-69db78412cea/dark_mode_search_bar_1764580666686.png)
-
-### Authentication
-![Login Redirect](file:///Users/mickaelnomel/.gemini/antigravity/brain/a26adaa1-5f66-4b7a-afba-69db78412cea/verify_auth_flow_retry_1764585174463.webp)
-
----
-Developed by [Mickael Nomel](https://github.com/NomelN)
