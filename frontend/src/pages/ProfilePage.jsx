@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { PasswordInput } from '../components/PasswordInput';
 
 export function ProfilePage() {
     const { user, setUser } = useAuth();
@@ -141,48 +142,37 @@ export function ProfilePage() {
 
                 {/* Current Password */}
                 <div className="mb-6">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Current Password
-                    </label>
-                    <input
-                        type="password"
-                        {...register('current_password')}
-                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
+                    <PasswordInput
+                        label="Current Password"
+                        name="current_password"
+                        register={register}
                     />
                 </div>
 
                 {/* New Password */}
                 <div className="mb-6">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        New Password
-                    </label>
-                    <input
-                        type="password"
-                        {...register('new_password', {
+                    <PasswordInput
+                        label="New Password"
+                        name="new_password"
+                        register={register}
+                        validation={{
                             minLength: { value: 6, message: 'Password must be at least 6 characters' }
-                        })}
-                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
+                        }}
+                        error={errors.new_password}
                     />
-                    {errors.new_password && (
-                        <p className="mt-1 text-sm text-red-500">{errors.new_password.message}</p>
-                    )}
                 </div>
 
                 {/* Confirm New Password */}
                 <div className="mb-8">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Confirm New Password
-                    </label>
-                    <input
-                        type="password"
-                        {...register('confirm_password', {
+                    <PasswordInput
+                        label="Confirm New Password"
+                        name="confirm_password"
+                        register={register}
+                        validation={{
                             validate: value => !newPassword || value === newPassword || 'Passwords do not match'
-                        })}
-                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white dark:bg-zinc-700 text-gray-900 dark:text-white"
+                        }}
+                        error={errors.confirm_password}
                     />
-                    {errors.confirm_password && (
-                        <p className="mt-1 text-sm text-red-500">{errors.confirm_password.message}</p>
-                    )}
                 </div>
 
                 {/* Buttons */}

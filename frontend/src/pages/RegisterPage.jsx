@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link, Navigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
+import { PasswordInput } from '../components/PasswordInput';
 
 export function RegisterPage() {
     const { register, handleSubmit, formState: { errors }, watch } = useForm();
@@ -50,16 +51,14 @@ export function RegisterPage() {
                         {errors.email && <span className="text-red-500 text-sm mt-1">{errors.email.message}</span>}
                     </div>
 
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
-                        <input
-                            type="password"
-                            {...register("password", { required: "Password is required", minLength: { value: 6, message: "Min 6 chars" } })}
-                            className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-zinc-900/50 border border-gray-300 dark:border-zinc-700 focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-gray-900 dark:text-white"
-                            placeholder="••••••••"
-                        />
-                        {errors.password && <span className="text-red-500 text-sm mt-1">{errors.password.message}</span>}
-                    </div>
+                    <PasswordInput
+                        label="Password"
+                        name="password"
+                        register={register}
+                        validation={{ required: "Password is required", minLength: { value: 6, message: "Min 6 chars" } }}
+                        error={errors.password}
+                        placeholder="••••••••"
+                    />
 
                     <button
                         type="submit"
