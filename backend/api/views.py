@@ -81,11 +81,20 @@ class StatsView(APIView):
 
         # Charts Data
         
-        # 1. Stock by Category
-        category_distribution = Product.objects.values('category__name').annotate(
+        # 1. Stock by Category (Top 5)
+        category_distribution_query = Product.objects.values('category__name').annotate(
             count=Count('id'),
             value=Sum(F('price') * F('quantity'))
-        ).order_by('-value')
+        ).order_by('-value')[:5]  # Limit to top 5 categories
+        
+        category_distribution = [
+            {
+                'category__name': item['category__name'] or 'Uncategorized',
+                'count': item['count'],
+                'value': item['value']
+            }
+            for item in category_distribution_query
+        ]
 
         # 2. Top Selling Products (Mocked logic if no sales data yet, otherwise use sold_quantity)
         top_products = Product.objects.order_by('-sold_quantity')[:5]

@@ -91,41 +91,63 @@ export function DashboardPage() {
                                     cx="50%"
                                     cy="50%"
                                     labelLine={false}
-                                    outerRadius={100}
+                                    label={false}
+                                    outerRadius={90}
                                     fill="#8884d8"
                                     dataKey="value"
                                     nameKey="category__name"
-                                    label={({ category__name, percent }) => `${category__name} ${(percent * 100).toFixed(0)}%`}
                                 >
                                     {charts.category_distribution.map((entry, index) => (
                                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                     ))}
                                 </Pie>
                                 <Tooltip
-                                    contentStyle={{ backgroundColor: '#1F2937', border: 'none', borderRadius: '8px', color: '#fff' }}
+                                    contentStyle={{
+                                        backgroundColor: '#fff',
+                                        border: '1px solid #e5e7eb',
+                                        borderRadius: '8px',
+                                        color: '#111827',
+                                        boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                                    }}
+                                    itemStyle={{ color: '#111827' }}
+                                />
+                                <Legend
+                                    verticalAlign="middle"
+                                    align="right"
+                                    layout="vertical"
+                                    iconType="circle"
+                                    wrapperStyle={{ paddingLeft: '20px' }}
                                 />
                             </PieChart>
                         </ResponsiveContainer>
                     </div>
                 </div>
+            </div>
 
-                {/* Top Products (Bar Chart) */}
-                <div className="bg-white dark:bg-zinc-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-white/10 lg:col-span-2">
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Top Selling Products</h3>
-                    <div className="h-80 w-full">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={charts.top_products}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.1} />
-                                <XAxis dataKey="name" stroke="#9CA3AF" />
-                                <YAxis stroke="#9CA3AF" />
-                                <Tooltip
-                                    contentStyle={{ backgroundColor: '#1F2937', border: 'none', borderRadius: '8px', color: '#fff' }}
-                                    cursor={{ fill: 'transparent' }}
-                                />
-                                <Bar dataKey="revenue" fill="#8b5cf6" radius={[4, 4, 0, 0]} name="Revenue (€)" />
-                            </BarChart>
-                        </ResponsiveContainer>
-                    </div>
+            {/* Top Products (Bar Chart) */}
+            <div className="bg-white dark:bg-zinc-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-white/10 lg:col-span-2 mt-8">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Top Selling Products</h3>
+                <div className="h-80 w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={charts.top_products} margin={{ bottom: 20 }}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.1} />
+                            <XAxis
+                                dataKey="name"
+                                stroke="#9CA3AF"
+                                tickFormatter={(value) => value.length > 10 ? `${value.substring(0, 10)}...` : value}
+                                interval={0}
+                                angle={-45}
+                                textAnchor="end"
+                                height={60}
+                            />
+                            <YAxis stroke="#9CA3AF" />
+                            <Tooltip
+                                contentStyle={{ backgroundColor: '#1F2937', border: 'none', borderRadius: '8px', color: '#fff' }}
+                                cursor={{ fill: 'transparent' }}
+                            />
+                            <Bar dataKey="revenue" fill="#8b5cf6" radius={[4, 4, 0, 0]} name="Revenue (€)" />
+                        </BarChart>
+                    </ResponsiveContainer>
                 </div>
             </div>
         </div>
